@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AFKKS Ponduru Khadi — hand-spun and handwoven in Andhra Pradesh.">
+  <title>AFKKS Ponduru Khadi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700&family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="notice" data-i18n="notice">Authentic Ponduru Khadi · Hand-spun and handwoven in Andhra Pradesh</div>
+  <header class="site-header container">
+    <a class="brand" href="#home" aria-label="AFKKS home"><img src="assets/images/afkk-ponduru-logo.png" alt="AFKKS logo"><span>The Andhra Fine Khadi Karmikabhivrudhi Sangham<small>AFKKS · PONDURU</small></span></a>
+    <nav aria-label="Main navigation"><a href="#products" data-i18n="productsNav">Khadi Products</a><a href="#journey" data-i18n="journeyNav">Heritage Journey</a><a href="#contact" data-i18n="contactNav">Contact Sangham</a></nav>
+    <button class="language" id="language-toggle" type="button">తెలుగు</button>
+  </header>
+
+  <main>
+    <section id="home" class="hero container">
+      <div><p class="eyebrow">Ponduru · Handspun · Handwoven</p><h1 data-i18n="heroTitle">A living tradition of <em>Ponduru Khadi.</em></h1><p data-i18n="heroCopy"><strong>The Andhra Fine Khadi Karmikabhivrudhi Sangham (AFKKS)</strong> is a government-recognized handloom and Khadi production centre on Main Road near Ponduru Bus Stand, Srikakulam district. It preserves the artisanal practice of Ponduru Khadi.</p><p class="address" data-i18n="address">Main Road, near Ponduru Bus Stand, Ponduru, Srikakulam – 532168, Andhra Pradesh</p><a class="button" href="#journey" data-i18n="journeyButton">Learn the journey</a></div>
+      <img src="assets/ponduru/image22.jpeg" alt="Traditional Ponduru handloom with prepared threads">
+    </section>
+
+    <section id="products" class="products-section"><div class="container"><p class="eyebrow" data-i18n="productsEyebrow">AFKKS product range</p><h2 data-i18n="productsTitle">Ponduru Khadi for every day and occasion</h2><div class="product-grid" id="product-grid"></div><p class="enquiry" data-i18n="enquiry">Product availability and pricing are confirmed on enquiry.</p></div></section>
+
+    <section id="journey" class="journey container"><p class="eyebrow" data-i18n="journeyEyebrow">The heritage journey</p><h2 data-i18n="journeyTitle">Eleven stages from cotton to cloth</h2><p class="intro" data-i18n="journeyCopy">Every metre carries the knowledge, labour and tradition of many skilled hands.</p><div class="stage-grid" id="stage-grid"></div></section>
+
+    <section class="leadership"><div class="container"><p class="eyebrow" data-i18n="leadershipEyebrow">AFKKS leadership</p><h2 data-i18n="leadershipTitle">Current leadership</h2><div class="leader-grid" id="leader-grid"></div></div></section>
+
+    <section id="contact" class="contact container"><div><p class="eyebrow" data-i18n="contactEyebrow">Contact AFKKS</p><h2 data-i18n="contactTitle">The Andhra Fine Khadi Karmikabhivrudhi Sangham</h2><p data-i18n="contactCopy">For product details, prices and orders, please contact the Sangham.</p><p class="address" data-i18n="address">Main Road, near Ponduru Bus Stand, Ponduru, Srikakulam – 532168, Andhra Pradesh</p></div><form id="enquiry-form"><label><span data-i18n="nameLabel">Your name</span><input required name="name" autocomplete="name"></label><label><span data-i18n="emailLabel">Email address</span><input required type="email" name="email" autocomplete="email"></label><label><span data-i18n="messageLabel">How can we help?</span><textarea required name="message" rows="6"></textarea></label><button class="button" type="submit" data-i18n="sendButton">Prepare enquiry email</button><p class="form-note" id="form-note" aria-live="polite"></p></form></section>
+  </main>
+  <footer><div class="container"><span>AFKKS PONDURU</span><span>© 2026 · Crafted with intention</span></div></footer>
+  <script src="app.js"></script>
+</body>
+</html>
