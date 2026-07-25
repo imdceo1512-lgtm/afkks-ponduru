@@ -12,3 +12,4 @@ This is a plain HTML, CSS and JavaScript version of the AFKKS Ponduru Khadi webs
 6. GitHub will display the public website address after deployment.
 
 The enquiry form opens the visitor's email application. Set a recipient address in `app.js` later if AFKKS approves one.
+# afkks-ponduru
