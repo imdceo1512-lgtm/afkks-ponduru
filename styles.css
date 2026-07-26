@@ -367,3 +367,53 @@ footer span:first-child {
         flex-direction: column
     }
 }
+
+html[lang="te"] body,
+html[lang="te"] input,
+html[lang="te"] textarea,
+html[lang="te"] select,
+html[lang="te"] button {
+    font-family: "Noto Serif Telugu", "Work Sans", sans-serif;
+}
+
+html[lang="te"] .eyebrow {
+    letter-spacing: .04em;
+    text-transform: none;
+}
+
+.whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+    background: #1f9d55;
+    color: #fff;
+    padding: 11px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    box-shadow: 3px 3px 0 #b6d7c1;
+}
+
+.whatsapp-button:hover { background: #187b43; }
+.whatsapp-button svg { width: 22px; height: 22px; fill: currentColor; flex: 0 0 auto; }
+
+.catalogue-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 0 26px;
+    border-bottom: 1px solid #ded2b9;
+}
+
+.catalogue-controls input,
+.catalogue-controls select {
+    padding: 11px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #fffdf8;
+    font: inherit;
+}
+
+@media(max-width:760px) {
+    .whatsapp-button { width: 100%; justify-content: center; }
+}
