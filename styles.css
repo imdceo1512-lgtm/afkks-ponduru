@@ -447,6 +447,17 @@ html[lang="te"] .eyebrow {
     font-size: 14px;
 }
 
+.catalogue-message {
+    grid-column: 1 / -1;
+    padding: 28px 22px;
+    background: #f3ead9;
+    border: 1px dashed var(--rule);
+    border-radius: 6px;
+    color: var(--soil);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
 .stock-status.is-out {
     color: #9b3429;
 }

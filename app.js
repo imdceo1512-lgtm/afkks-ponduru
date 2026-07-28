@@ -1,4 +1,8 @@
+/* AFKKS Ponduru Khadi — site logic
+   Single, consolidated version. Products load only from products.xlsx (Products sheet). */
+
 const productData = [];
+
 const stages = [
     ['Selecting indigenous cotton', 'స్థానిక పత్తి ఎంపిక', 'Konda Patti & Yerra Patti', 'స్థానిక పత్తి రకాలు', 'Local short-staple cotton suited to fine hand spinning is selected.', 'సన్నని చేతి నూలుకు అనువైన స్థానిక పొట్టి పీచు పత్తిని ఎంచుకుంటారు.', 'Tool: Cotton bolls and field selection. Who: Local cotton growers. Why: Fine hand spinning begins with suitable fibre. How: Cotton is selected and harvested before preparation.', 'పరికరం: పత్తి కాయలు మరియు పంట ఎంపిక. ఎవరు: స్థానిక పత్తి రైతులు. ఎందుకు: సన్నని చేతి నూలుకు సరైన పీచు అవసరం. ఎలా: పత్తిని ఎంచి, పండిన తర్వాత సేకరిస్తారు.', 'image1.jpeg'],
     ['Cleaning with the Valuga fish jaw', 'వలుగ చేప దవడతో శుభ్రపరచడం', 'Valuga fish jawbone', 'వలుగ చేప దవడ', 'Fine impurities are lifted while protecting delicate fibre.', 'సన్నని మలినాలను తొలగిస్తూ పత్తి పీచును కాపాడుతారు.', 'Tool: Naturally serrated fish jaw. Who: Cotton-preparation artisans. Why: Removes dust and leaf particles without cutting fibre. How: Cotton is repeatedly combed by hand.', 'పరికరం: సహజ దంతాలున్న చేప దవడ. ఎవరు: పత్తి తయారీ కళాకారులు. ఎందుకు: పీచు తెగకుండా దుమ్ము, ఆకు ముక్కలను తొలగించడానికి. ఎలా: పత్తిని దవడతో పదే పదే దువ్వుతారు.', 'image4.jpeg'],
@@ -12,50 +16,336 @@ const stages = [
     ['Hand weaving', 'చేతి మగ్గం నేయడం', 'Traditional pit or frame loom', 'సాంప్రదాయ గుంట లేదా ఫ్రేమ్ మగ్గం', 'Warp and weft are interlaced by hand into Ponduru fabric.', 'వార్ప్, వెఫ్ట్ నూలును చేతితో అల్లుతూ పొందూరు వస్త్రాన్ని నేస్తారు.', 'Tool: Traditional pit or frame loom. Who: Handloom weavers. Why: Brings warp and weft together. How: The weaver controls interlacing and tension by hand.', 'పరికరం: సాంప్రదాయ గుంట లేదా ఫ్రేమ్ మగ్గం. ఎవరు: చేతి మగ్గం నేయువారు. ఎందుకు: వార్ప్, వెఫ్ట్‌ను కలపడానికి. ఎలా: నేయువారు అల్లిక, బిగుతును చేతితో నియంత్రిస్తారు.', 'image22.jpeg'],
     ['Washing and finishing', 'ఉతకడం మరియు తుది తయారీ', 'Washing, drying and pressing tools', 'ఉతకడం, ఎండబెట్టడం, ఇస్త్రీ పరికరాలు', 'The finished cloth is washed, dried, pressed and inspected.', 'తుది వస్త్రాన్ని ఉతికి, ఎండబెట్టి, ఇస్త్రీ చేసి పరిశీలిస్తారు.', 'Tool: Washing, drying, pressing and inspection tools. Who: Finishing and quality team. Why: Prepares cloth for use and sale. How: The cloth is washed, dried, pressed, folded and inspected.', 'పరికరం: ఉతకడం, ఎండబెట్టడం, ఇస్త్రీ, పరిశీలన పరికరాలు. ఎవరు: తుది తయారీ, నాణ్యత బృందం. ఎందుకు: అమ్మకానికి ముందు వస్త్రాన్ని సిద్ధం చేయడానికి. ఎలా: వస్త్రాన్ని ఉతికి, ఎండబెట్టి, ఇస్త్రీ చేసి, మడతపెట్టి పరిశీలిస్తారు.', 'image25.jpeg']
 ];
-const te = () => localStorage.getItem('afkks-language') === 'te'; const label = (en, tel) => te() ? tel : en;
-function header() { document.documentElement.lang = te() ? 'te' : 'en'; document.querySelectorAll('[data-cart-count]').forEach(e => e.textContent = cart().reduce((n, x) => n + x.quantity, 0)); document.querySelectorAll('[data-lang]').forEach(e => e.textContent = te() ? 'English' : 'తెలుగు'); applyStaticLanguage(); }
-function cart() { return JSON.parse(localStorage.getItem('afkks-cart') || '[]') } function saveCart(items) { localStorage.setItem('afkks-cart', JSON.stringify(items)); header() }
-function add(id, variant, quantity = 1) { const items = cart(), item = items.find(x => x.id === id && x.variant === variant); item ? item.quantity += quantity : items.push({ id, variant, quantity }); saveCart(items) }
-function productCard(p) { return `<article class="product-card"><a href="product.html?id=${p.id}"><img src="assets/products/${p.image}" alt="${label(p.name, p.te)}"></a><div><p class="eyebrow">${label(p.category, p.teCategory)}</p><h3>${label(p.name, p.te)}</h3><p>${label(p.description, p.teDescription)}</p><p class="price">${label('Price on enquiry', 'ధర విచారణపై')}</p><a class="text-link" href="product.html?id=${p.id}">${label('View details', 'వివరాలు చూడండి')} →</a></div></article>` }
-function setLanguage() { document.querySelectorAll('[data-language-toggle]').forEach(b => b.addEventListener('click', () => { localStorage.setItem('afkks-language', te() ? 'en' : 'te'); location.reload() })); header() }
-function applyStaticLanguage() { const nav = document.querySelectorAll('.site-header nav a'); const brand = document.querySelector('.brand > span'); const notice = document.querySelector('.notice'); const footer = document.querySelector('footer'); if (notice) notice.textContent = label('Authentic Ponduru Khadi · Hand-spun and handwoven in Andhra Pradesh', 'అసలైన పొందూరు ఖాదీ · ఆంధ్రప్రదేశ్‌లో చేతితో వడికినది, చేతితో నేసినది'); if (brand) brand.innerHTML = `${label('The Andhra Fine Khadi Karmikabhivrudhi Sangham', 'ది ఆంధ్ర ఫైన్ ఖాదీ కార్మికాభివృద్ధి సంఘం')}<small>AFKKS · PONDURU</small>`;[[0, 'Khadi Products', 'ఖాదీ ఉత్పత్తులు'], [1, 'Heritage Journey', 'వారసత్వ ప్రయాణం'], [2, 'Contact Sangham', 'సంఘాన్ని సంప్రదించండి'], [3, 'Cart', 'కార్ట్']].forEach(([index, en, tel]) => { if (nav[index]) nav[index].childNodes[0].nodeValue = label(en, tel) + (index === 3 ? ' ' : '') }); if (footer) footer.querySelectorAll('span')[1].textContent = label('© 2026 · Crafted with intention', '© 2026 · ఉద్దేశ్యంతో రూపొందించబడింది'); const path = location.pathname.split('/').pop() || 'index.html'; const pageCopy = { 'shop.html': ['AFKKS Sangham catalogue', 'AFKKS సంఘం ఉత్పత్తి జాబితా', 'Ponduru Khadi, made with care', 'శ్రద్ధతో రూపొందిన పొందూరు ఖాదీ', 'A representative range of AFKKS and Ponduru Khadi products. Current prices, counts and availability are confirmed directly with the Sangham.', 'AFKKS మరియు పొందూరు ఖాదీ ఉత్పత్తుల జాబితా. ప్రస్తుత ధరలు, కౌంట్లు, లభ్యతను సంఘంతో నేరుగా నిర్ధారించండి.'], 'journey.html': ['Presented by AFKKS', 'AFKKS సమర్పణ', 'The Journey of Ponduru Khadi', 'పొందూరు ఖాదీ ప్రయాణం', 'From indigenous cotton to finished cloth, every metre carries the knowledge, labour and tradition of many skilled hands.', 'స్థానిక పత్తి నుండి సిద్ధమైన వస్త్రం వరకు, ప్రతి మీటరులో జ్ఞానం, శ్రమ, సంప్రదాయం మిళితమై ఉంటాయి.'], 'contact.html': ['Contact AFKKS', 'AFKKSను సంప్రదించండి', 'The Andhra Fine Khadi Karmikabhivrudhi Sangham', 'ది ఆంధ్ర ఫైన్ ఖాదీ కార్మికాభివృద్ధి సంఘం', 'For product details, pricing and orders, please contact the Sangham.', 'ఉత్పత్తి వివరాలు, ధరలు మరియు ఆర్డర్ల కోసం సంఘాన్ని సంప్రదించండి.'], 'cart.html': ['Your bag', 'మీ కార్ట్', 'Woven into your plans', 'మీ అవసరాల కోసం నేసినది', 'Prices and availability are confirmed directly with AFKKS.', 'ధరలు మరియు లభ్యతను AFKKSతో నేరుగా నిర్ధారించండి.'], 'checkout.html': ['Checkout', 'చెక్‌అవుట్', 'Your delivery details', 'మీ పంపిణీ వివరాలు', 'Payment integration and final shipping charges must be confirmed by AFKKS before publishing. You can submit this as an enquiry meanwhile.', 'చెల్లింపు విధానం, తుది రవాణా ఖర్చులను ప్రచురణకు ముందు AFKKS నిర్ధారించాలి. ప్రస్తుతానికి విచారణ పంపవచ్చు.'] }[path]; if (pageCopy) { const main = document.querySelector('main'); const eyebrow = main?.querySelector('.eyebrow'); const heading = main?.querySelector('h1'); const copy = main?.querySelector('p:not(.eyebrow)'); if (eyebrow) eyebrow.textContent = label(pageCopy[0], pageCopy[1]); if (heading) heading.textContent = label(pageCopy[2], pageCopy[3]); if (copy) copy.textContent = label(pageCopy[4], pageCopy[5]); } }
-function renderHome() { const grid = document.querySelector('#product-grid'); if (grid) grid.innerHTML = productData.slice(0, 6).map(productCard).join(''); const stage = document.querySelector('#stage-grid'); if (stage) stage.innerHTML = stages.map((s, i) => `<article class="stage"><img src="assets/ponduru/${s[8]}" alt=""><div><p class="eyebrow">${label('Stage', 'దశ')} ${String(i + 1).padStart(2, '0')}</p><h3>${label(s[0], s[1])}</h3><p>${label(s[4], s[5])}</p></div></article>`).join(''); const leaders = document.querySelector('#leader-grid'); if (leaders) leaders.innerHTML = [['President', 'అధ్యక్షుడు', 'Prasad'], ['Secretary', 'కార్యదర్శి', 'D. Venakata Rao'], ['Treasurer & Production Manager', 'కోశాధికారి మరియు ఉత్పత్తి మేనేజర్', 'U. V. Satyanarayana']].map(x => `<article class="leader"><p class="eyebrow">${label(x[0], x[1])}</p><h3>${x[2]}</h3></article>`).join('') }
-function renderShop() { const grid = document.querySelector('#all-products'); if (grid) grid.innerHTML = productData.map(productCard).join('') }
-function renderJourney() { const target = document.querySelector('#full-journey'); if (target) target.innerHTML = stages.map((s, i) => `<article class="journey-stage"><img src="assets/ponduru/${s[8]}" alt="${label(s[0], s[1])}"><div><p class="eyebrow">${label('Stage', 'దశ')} ${String(i + 1).padStart(2, '0')} · ${label(s[2], s[3])}</p><h2>${label(s[0], s[1])}</h2><p>${label(s[4], s[5])}</p><div class="craft-note">${label(s[6], s[7])}</div></div></article>`).join('') }
-function renderProduct() { const target = document.querySelector('#product-detail'); if (!target) return; const p = productData.find(x => x.id === new URLSearchParams(location.search).get('id')) || productData[0]; target.innerHTML = `<img src="assets/products/${p.image}" alt="${label(p.name, p.te)}"><div><p class="eyebrow">${label(p.category, p.teCategory)}</p><h1>${label(p.name, p.te)}</h1><p class="product-description">${label(p.description, p.teDescription)}</p><p class="price large">${label('Price on enquiry', 'ధర విచారణపై')}</p><p>${label(p.details, 'ప్రస్తుత ఉత్పత్తి లభ్యతను AFKKSతో నిర్ధారించండి.')}</p><label>${label('Select option', 'ఎంపికను ఎంచుకోండి')}<select id="variant">${p.variants.map(x => `<option>${x}</option>`).join('')}</select></label><label>${label('Quantity', 'పరిమాణం')}<input id="quantity" type="number" min="1" value="1"></label><div class="actions"><button class="button" id="add-cart">${label('Add to cart', 'కార్ట్‌కు జోడించండి')}</button><a class="button secondary" id="buy-now" href="cart.html">${label('Buy / enquire now', 'కొనండి / విచారించండి')}</a></div></div>`; document.querySelector('#add-cart').onclick = () => { add(p.id, document.querySelector('#variant').value, Number(document.querySelector('#quantity').value)); document.querySelector('#add-cart').textContent = label('Added to cart', 'కార్ట్‌కు జోడించబడింది') }; document.querySelector('#buy-now').onclick = () => add(p.id, document.querySelector('#variant').value, Number(document.querySelector('#quantity').value)) }
-function renderCart() { const target = document.querySelector('#cart-items'); if (!target) return; const items = cart(); if (!items.length) { target.innerHTML = `<p>${label('Your cart is empty.', 'మీ కార్ట్ ఖాళీగా ఉంది.')}</p>`; return } target.innerHTML = items.map((x, i) => { const p = productData.find(p => p.id === x.id); return `<article class="cart-item"><img src="assets/products/${p.image}" alt=""><div><h2>${label(p.name, p.te)}</h2><p>${x.variant} · ${label('Quantity', 'పరిమాణం')}: ${x.quantity}</p><p class="price">${label('Price on enquiry', 'ధర విచారణపై')}</p><button class="text-link" data-remove="${i}">${label('Remove', 'తొలగించండి')}</button></div></article>` }).join(''); target.querySelectorAll('[data-remove]').forEach(b => b.onclick = () => { const x = cart(); x.splice(Number(b.dataset.remove), 1); saveCart(x); renderCart() }); document.querySelector('#cart-enquiry').style.display = 'inline-block' }
-function contactForm() { const f = document.querySelector('#enquiry-form'); if (!f) return; f.addEventListener('submit', e => { e.preventDefault(); const d = new FormData(f), items = cart().map(x => { const p = productData.find(p => p.id === x.id); return `${p.name} (${x.variant}) × ${x.quantity}` }).join('\n'); location.href = `mailto:?subject=${encodeURIComponent('AFKKS website enquiry')}&body=${encodeURIComponent(`Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\nProducts:\n${items || 'None selected'}\n\nMessage:\n${d.get('message')}`)}` }) }
-document.querySelectorAll('[data-i18n="productsNav"]').forEach(a => a.href = 'shop.html'); document.querySelectorAll('[data-i18n="journeyNav"]').forEach(a => a.href = 'journey.html'); document.querySelectorAll('[data-i18n="contactNav"]').forEach(a => a.href = 'contact.html'); document.querySelectorAll('#language-toggle').forEach(b => b.dataset.languageToggle = '');
-document.head.insertAdjacentHTML('beforeend', `<style>.page{padding:64px 24px 72px}.page>h1{font:clamp(3rem,7vw,5.2rem)/.98 Spectral,"Noto Serif Telugu",serif;letter-spacing:-.03em;margin:8px 0 20px}.page .intro{max-width:760px;margin:0 0 34px}.price{color:#9f482f;font-size:13px;font-weight:700;margin-top:13px!important}.text-link{display:inline-block;margin-top:16px;font-size:14px;font-weight:700;color:#6d2530;background:none;border:0;padding:0;cursor:pointer}.journey-stage{display:grid;grid-template-columns:1fr 1.05fr;gap:42px;align-items:center;margin:0 0 72px}.journey-stage:nth-child(even) img{order:2}.journey-stage img{width:100%;height:390px;object-fit:cover;border:6px solid #e7d6b9}.journey-stage h2{font-size:38px;margin:10px 0 15px}.craft-note{background:#f3ead9;padding:16px;margin-top:16px;font-size:13px;line-height:1.75}.product-detail{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start;padding-top:28px}.product-detail>img{width:100%;height:520px;object-fit:cover;border:7px solid #e7d6b9}.product-detail h1{font:clamp(2.8rem,5vw,4.5rem)/.98 Spectral,"Noto Serif Telugu",serif;letter-spacing:-.03em;margin:8px 0 18px}.product-description{font-size:18px}.large{font-size:17px}.product-detail label{display:grid;gap:7px;font-weight:700;font-size:14px;margin-top:18px}.product-detail select,.product-detail input{max-width:300px;padding:11px;border:1px solid #b69568;background:#fffdf8;font:inherit}.actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px}.secondary{background:transparent;border:1px solid #3c2a1e;box-shadow:none;color:#3c2a1e}.cart-items{display:grid;gap:16px;margin:28px 0}.cart-item{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;background:#f3ead9;padding:16px}.cart-item img{width:150px;height:120px;object-fit:cover}.cart-item h2{font-size:28px;margin:0}.cart-item p{margin:6px 0}.contact.page{padding-top:70px}.contact.page h1{font:clamp(2.5rem,5vw,4rem)/1 Spectral,"Noto Serif Telugu",serif;letter-spacing:-.03em;margin:7px 0 20px}@media(max-width:760px){.journey-stage,.product-detail{grid-template-columns:1fr;gap:22px}.journey-stage:nth-child(even) img{order:0}.journey-stage img,.product-detail>img{height:320px}.cart-item{grid-template-columns:100px 1fr}.cart-item img{width:100px;height:90px}.page{padding-top:42px}.site-header nav{flex-wrap:wrap}.site-header nav a{font-size:12px}}</style>`);
-setLanguage(); renderHome(); renderShop(); renderJourney(); renderProduct(); renderCart(); contactForm();
-const register = [['VERIFIED', 'Institution profile', 'KVIC lists Andhra Fine Khadi Karmikabhivrudhi Sangham, Ponduru as institution code 178, near the bus stand, aided by KVIC. The profile lists Khadi Mark No. 036 and a certificate dated through 31 March 2026.'], ['VERIFIED', 'Founding milestone', 'The Ministry of Culture district repository records the Andhra Sanna Khadi Sangha as established on 1 April 1949 and records Acharya Vinoba Bhave laying its foundation stone on 13 October 1955. AFKKS archival confirmation is still being sought.'], ['VERIFIED', 'Government initiative', 'Srikakulam district’s ODOP page records that a detailed project report was sought for a proposed Mega Handloom Cluster.'], ['VERIFIED', 'Craft recognition', 'Public heritage documentation describes Ponduru Patnulu Khadi as hand-spun and handwoven, with AFKKS functioning as a khadi cooperative in Ponduru.'], ['UNVERIFIED', 'First office-bearers', 'The President, Secretary and Managing Director recorded at the 1949 registration have not yet been confirmed.'], ['VERIFIED', 'Current leadership', 'AFKKS confirms the current office-bearers as President Prasad, Secretary D. Venakata Rao, and Treasurer & Production Manager U. V. Satyanarayana. Their tenure dates remain to be confirmed.'], ['UNVERIFIED', 'Artisan headcount', 'AFKKS needs to provide one dated current count, ideally separating Ponduru town from the wider district.'], ['UNVERIFIED', 'Early history', 'The early narrative, master artisans, original objectives and funding require independent archival corroboration.'], ['UNVERIFIED', 'Ponduru history timeline', 'The exact date of Gandhi’s Dusi railway-station connection and the boundary between folklore and documented history require further research.'], ['UNVERIFIED', 'Foundation-stone archive', 'Photographs, invitations, press clippings and confirmation of the ceremony remain to be located in AFKKS records.'], ['UNVERIFIED', 'Support & GI detail', 'Scheme support, GI geographical boundary and authorised-user details require official records.'], ['UNVERIFIED', 'Dignitary visits', 'The AFKKS visitors’ book and archives need to confirm reported visits and occasions.'], ['UNVERIFIED', 'Social impact', 'Benefits, bonuses and prevailing spinner/weaver wages require first-hand, current confirmation.'], ['UNVERIFIED', 'Awards & future roadmap', 'Awards, sales/visitor figures, Khadi Village status and internal plans require documentary confirmation.']];
-const journeyPage = document.querySelector('#full-journey'); if (journeyPage) { journeyPage.insertAdjacentHTML('afterend', `<section style="background:#eee5d3;padding:58px 24px;margin:0 -24px"><div class="container" style="max-width:1000px"><p class="eyebrow">AFKKS institutional research register</p><h2 style="font-size:40px">Verified history and records under verification</h2><p>Each item is clearly labelled. Unverified entries remain marked until AFKKS archives, official records or other primary evidence confirm them.</p><div style="display:grid;gap:12px;margin-top:28px">${register.map(r => `<article style="background:#f8f4ea;padding:20px;border-left:5px solid ${r[0] === 'VERIFIED' ? '#4b5d35' : '#9f482f'}"><span style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${r[0] === 'VERIFIED' ? '#4b5d35' : '#9f482f'}">${r[0]}${r[0] === 'UNVERIFIED' ? ' — PENDING CONFIRMATION' : ''}</span><h3 style="font-size:25px;margin:6px 0">${r[1]}</h3><p style="margin:0">${r[2]}</p></article>`).join('')}</div></div></section>`) }
-const homeProducts = document.querySelector('#products'); if (homeProducts) homeProducts.insertAdjacentHTML('beforebegin', '<section class="container" style="padding:72px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px"><div><p class="eyebrow">Ponduru heritage</p><h3>Fine-count Khadi</h3><p>Rooted in a living Andhra Pradesh tradition.</p></div><div><p class="eyebrow">Made by hand</p><h3>Every metre matters</h3><p>Each metre carries the rhythm of a handloom.</p></div><div><p class="eyebrow">Built to last</p><h3>Timeless cloth</h3><p>Thoughtful fabric for beautiful, enduring pieces.</p></div></section>');
-const catalogue = document.querySelector('#all-products'); if (catalogue) { catalogue.insertAdjacentHTML('beforebegin', '<div class="catalogue-controls"><input id="product-search" placeholder="Search products" aria-label="Search products"><select id="product-category"><option value="All">All categories</option></select></div><p id="product-count"></p>'); const cat = document.querySelector('#product-category');[...new Set(productData.map(p => p.category))].forEach(x => cat.insertAdjacentHTML('beforeend', `<option>${x}</option>`)); const filter = () => { const q = document.querySelector('#product-search').value.toLowerCase(), c = cat.value, visible = productData.filter(p => (c === 'All' || p.category === c) && (p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))); catalogue.innerHTML = visible.map(productCard).join(''); document.querySelector('#product-count').textContent = `${visible.length} product categories` }; document.querySelector('#product-search').oninput = filter; cat.onchange = filter; filter() }
-const goCheckout = document.querySelector('#cart-enquiry'); if (goCheckout) goCheckout.href = 'checkout.html';
 
-function priceLabel(product) { return Number.isFinite(Number(product.price)) ? `₹${Number(product.price).toLocaleString('en-IN')} / ${product.saleUnit || 'piece'}` : label('Price on enquiry', 'ధర విచారణపై') }
-function stockLabel(product) { const stock = Number(product.unitsAvailable); if (!Number.isFinite(stock)) return label('Availability on enquiry', 'లభ్యత విచారణపై'); if (stock <= 0) return label('Out of stock', 'నిల్వలో లేదు'); return `${stock} ${product.saleUnit === 'metre' ? label('m available', 'మీటర్లు లభ్యం') : label('pieces available', 'ముక్కలు లభ్యం')}` }
-function productCard(product) { const unavailable = Number(product.unitsAvailable) === 0; return `<article class="product-card"><a href="product.html?id=${product.id}"><img src="assets/products/${product.image}" alt="${label(product.name, product.te)}"></a><div><p class="eyebrow">${label(product.category, product.teCategory || product.category)}</p><h3>${label(product.name, product.te)}</h3><p>${label(product.description, product.teDescription || product.description)}</p><p class="price">${priceLabel(product)}</p><p style="font-size:12px;color:${unavailable ? '#9f482f' : '#4b5d35'};font-weight:700">${stockLabel(product)}</p><a class="text-link" href="product.html?id=${product.id}">${label('View details', 'వివరాలు చూడండి')} →</a></div></article>` }
-function renderProduct() { const target = document.querySelector('#product-detail'); if (!target) return; const product = productData.find(x => x.id === new URLSearchParams(location.search).get('id')) || productData[0]; const unavailable = Number(product.unitsAvailable) === 0; const min = product.minimumOrder || 1; target.innerHTML = `<img src="assets/products/${product.image}" alt="${label(product.name, product.te)}"><div><p class="eyebrow">${label(product.category, product.teCategory || product.category)}</p><h1>${label(product.name, product.te)}</h1><p class="product-description">${label(product.description, product.teDescription || product.description)}</p><p class="price large">${priceLabel(product)}</p><p style="font-weight:700;color:${unavailable ? '#9f482f' : '#4b5d35'}">${stockLabel(product)}</p><p>${product.details || product.productNote || ''}</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid #ded2b9;padding-top:18px;font-size:14px"><div><b>Material</b><br>${product.material || '—'}</div><div><b>Weave</b><br>${product.weave || '—'}</div><div><b>Colour</b><br>${product.colour || '—'}</div><div><b>Availability</b><br>${product.availability || stockLabel(product)}</div></div><label>${label('Quantity', 'పరిమాణం')}<input id="quantity" type="number" min="${min}" step="${product.saleUnit === 'metre' ? '0.5' : '1'}" value="${min}" ${unavailable ? 'disabled' : ''}></label><div class="actions"><button class="button" id="add-cart" ${unavailable ? 'disabled style="opacity:.55;cursor:not-allowed"' : ''}>${unavailable ? label('Out of stock', 'నిల్వలో లేదు') : label('Add to cart', 'కార్ట్‌కు జోడించండి')}</button><a class="button secondary" id="buy-now" href="cart.html" ${unavailable ? 'style="pointer-events:none;opacity:.55"' : ''}>${label('Buy / enquire now', 'కొనండి / విచారించండి')}</a></div></div>`; if (!unavailable) { const addItem = () => { add(product.id, product.saleUnit || 'piece', Number(document.querySelector('#quantity').value)); document.querySelector('#add-cart').textContent = label('Added to cart', 'కార్ట్‌కు జోడించబడింది') }; document.querySelector('#add-cart').onclick = addItem; document.querySelector('#buy-now').onclick = addItem } }
-async function loadExcelCatalogue() { try { const xlsx = await import('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/+esm'); const response = await fetch(`products.xlsx?updated=${Date.now()}`); if (!response.ok) throw new Error('products.xlsx not found'); const workbook = xlsx.read(await response.arrayBuffer(), { type: 'array' }); const rows = xlsx.utils.sheet_to_json(workbook.Sheets.Products, { defval: '' }); const catalogue = rows.filter(row => String(row.active).toLowerCase() === 'yes').map(row => ({ id: String(row.id), name: String(row.name_en), te: String(row.name_te), category: String(row.category), teCategory: String(row.category), price: Number(row.price_inr), saleUnit: String(row.sale_unit), unitsAvailable: Number(row.units_available), minimumOrder: Number(row.minimum_order), image: String(row.image_file), description: String(row.description_en), teDescription: String(row.description_te), material: String(row.material), weave: String(row.weave), colour: String(row.colour), availability: String(row.availability), productNote: String(row.product_note), details: String(row.product_note), variants: [String(row.sale_unit)] })); if (!catalogue.length) throw new Error('No active products'); productData.splice(0, productData.length, ...catalogue); renderHome(); renderShop(); renderProduct() } catch (error) { console.warn('Using bundled catalogue until products.xlsx is available.', error) } }
-if (document.querySelector('#product-grid, #all-products, #product-detail, #cart-items')) loadExcelCatalogue();
-if (!document.querySelector('link[data-afkks-telugu-font]')) document.head.insertAdjacentHTML('beforeend', '<link data-afkks-telugu-font rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700&display=swap">');
-if (te()) { const labels = [['name', 'మీ పేరు'], ['email', 'ఇమెయిల్ చిరునామా'], ['message', 'మేము ఎలా సహాయం చేయగలం?']]; labels.forEach(([field, text]) => { const input = document.querySelector(`[name="${field}"]`); if (input?.parentElement) input.parentElement.childNodes[0].nodeValue = text; }); document.querySelectorAll('button[type="submit"]').forEach(button => button.textContent = 'విచారణ పంపండి'); document.querySelectorAll('.whatsapp-button span').forEach(span => span.textContent = 'WhatsApp ద్వారా సంప్రదించండి'); }
-function deferNoncriticalImages() { document.querySelectorAll('.product-card img, .stage img, .journey-stage img, .cart-item img').forEach(image => { image.loading = 'lazy'; image.decoding = 'async'; }); }
+/* ---------- language ---------- */
+const te = () => localStorage.getItem('afkks-language') === 'te';
+const label = (en, tel) => te() ? tel : en;
+
+function setLanguage() {
+    document.querySelectorAll('[data-language-toggle]').forEach(b => b.addEventListener('click', () => {
+        localStorage.setItem('afkks-language', te() ? 'en' : 'te');
+        location.reload();
+    }));
+    header();
+}
+
+function applyStaticLanguage() {
+    const nav = document.querySelectorAll('.site-header nav a');
+    const brand = document.querySelector('.brand > span');
+    const notice = document.querySelector('.notice');
+    const footer = document.querySelector('footer');
+    if (notice) notice.textContent = label('Authentic Ponduru Khadi · Hand-spun and handwoven in Andhra Pradesh', 'అసలైన పొందూరు ఖాదీ · ఆంధ్రప్రదేశ్‌లో చేతితో వడికినది, చేతితో నేసినది');
+    if (brand) brand.innerHTML = `${label('The Andhra Fine Khadi Karmikabhivrudhi Sangham', 'ది ఆంధ్ర ఫైన్ ఖాదీ కార్మికాభివృద్ధి సంఘం')}<small>AFKKS · PONDURU</small>`;
+    [[0, 'Khadi Products', 'ఖాదీ ఉత్పత్తులు'], [1, 'Heritage Journey', 'వారసత్వ ప్రయాణం'], [2, 'Contact Sangham', 'సంఘాన్ని సంప్రదించండి'], [3, 'Cart', 'కార్ట్']].forEach(([index, en, tel]) => {
+        if (nav[index]) nav[index].childNodes[0].nodeValue = label(en, tel) + (index === 3 ? ' ' : '');
+    });
+    if (footer) footer.querySelectorAll('span')[1].textContent = label('© 2026 · Crafted with intention', '© 2026 · ఉద్దేశ్యంతో రూపొందించబడింది');
+
+    const path = location.pathname.split('/').pop() || 'index.html';
+    const pageCopy = {
+        'shop.html': ['AFKKS Sangham catalogue', 'AFKKS సంఘం ఉత్పత్తి జాబితా', 'Ponduru Khadi, made with care', 'శ్రద్ధతో రూపొందిన పొందూరు ఖాదీ', 'A representative range of AFKKS and Ponduru Khadi products. Current prices, counts and availability are confirmed directly with the Sangham.', 'AFKKS మరియు పొందూరు ఖాదీ ఉత్పత్తుల జాబితా. ప్రస్తుత ధరలు, కౌంట్లు, లభ్యతను సంఘంతో నేరుగా నిర్ధారించండి.'],
+        'journey.html': ['Presented by AFKKS', 'AFKKS సమర్పణ', 'The Journey of Ponduru Khadi', 'పొందూరు ఖాదీ ప్రయాణం', 'From indigenous cotton to finished cloth, every metre carries the knowledge, labour and tradition of many skilled hands.', 'స్థానిక పత్తి నుండి సిద్ధమైన వస్త్రం వరకు, ప్రతి మీటరులో జ్ఞానం, శ్రమ, సంప్రదాయం మిళితమై ఉంటాయి.'],
+        'contact.html': ['Contact AFKKS', 'AFKKSను సంప్రదించండి', 'The Andhra Fine Khadi Karmikabhivrudhi Sangham', 'ది ఆంధ్ర ఫైన్ ఖాదీ కార్మికాభివృద్ధి సంఘం', 'For product details, pricing and orders, please contact the Sangham.', 'ఉత్పత్తి వివరాలు, ధరలు మరియు ఆర్డర్ల కోసం సంఘాన్ని సంప్రదించండి.'],
+        'cart.html': ['Your bag', 'మీ కార్ట్', 'Woven into your plans', 'మీ అవసరాల కోసం నేసినది', 'Prices and availability are confirmed directly with AFKKS.', 'ధరలు మరియు లభ్యతను AFKKSతో నేరుగా నిర్ధారించండి.'],
+        'checkout.html': ['Checkout', 'చెక్‌అవుట్', 'Your delivery details', 'మీ పంపిణీ వివరాలు', 'Payment integration and final shipping charges must be confirmed by AFKKS before publishing. You can submit this as an enquiry meanwhile.', 'చెల్లింపు విధానం, తుది రవాణా ఖర్చులను ప్రచురణకు ముందు AFKKS నిర్ధారించాలి. ప్రస్తుతానికి విచారణ పంపవచ్చు.']
+    }[path];
+    if (pageCopy) {
+        const main = document.querySelector('main');
+        const eyebrow = main?.querySelector('.eyebrow');
+        const heading = main?.querySelector('h1');
+        const copy = main?.querySelector('p:not(.eyebrow)');
+        if (eyebrow) eyebrow.textContent = label(pageCopy[0], pageCopy[1]);
+        if (heading) heading.textContent = label(pageCopy[2], pageCopy[3]);
+        if (copy) copy.textContent = label(pageCopy[4], pageCopy[5]);
+    }
+    if (te()) {
+        const labels = [['name', 'మీ పేరు'], ['email', 'ఇమెయిల్ చిరునామా'], ['message', 'మేము ఎలా సహాయం చేయగలం?']];
+        labels.forEach(([field, text]) => {
+            const input = document.querySelector(`[name="${field}"]`);
+            if (input?.parentElement) input.parentElement.childNodes[0].nodeValue = text;
+        });
+        document.querySelectorAll('button[type="submit"]').forEach(button => button.textContent = 'విచారణ పంపండి');
+        document.querySelectorAll('.whatsapp-button span').forEach(span => span.textContent = 'WhatsApp ద్వారా సంప్రదించండి');
+    }
+}
+
+/* ---------- header / cart storage ---------- */
+function header() {
+    document.documentElement.lang = te() ? 'te' : 'en';
+    document.querySelectorAll('[data-cart-count]').forEach(e => e.textContent = cart().reduce((n, x) => n + x.quantity, 0));
+    document.querySelectorAll('[data-lang]').forEach(e => e.textContent = te() ? 'English' : 'తెలుగు');
+    applyStaticLanguage();
+}
+function cart() { return JSON.parse(localStorage.getItem('afkks-cart') || '[]'); }
+function saveCart(items) { localStorage.setItem('afkks-cart', JSON.stringify(items)); header(); }
+
+/* ---------- quantity handling ---------- */
+function normaliseQuantity(product, value) {
+    const step = product.saleUnit === 'metre' ? .25 : 1;
+    const minimum = Number(product.minimumOrder) || step;
+    const stock = Number(product.unitsAvailable);
+    const rounded = Math.round(Number(value || minimum) / step) * step;
+    const limited = stock > 0 ? Math.min(rounded, stock) : rounded;
+    return Math.max(minimum, limited);
+}
+
+function add(id, variant, quantity) {
+    const product = productData.find(item => item.id === id);
+    if (!product || Number(product.unitsAvailable) === 0) return;
+    const items = cart();
+    const existing = items.find(item => item.id === id && item.variant === variant);
+    if (existing) existing.quantity = normaliseQuantity(product, Number(existing.quantity) + Number(quantity));
+    else items.push({ id, variant, quantity: normaliseQuantity(product, quantity) });
+    saveCart(items);
+}
+
+function quantityPicker(product, value, inputId) {
+    const metre = product.saleUnit === 'metre';
+    const presets = metre ? [.25, .5, .75, 1, 2, 3] : [];
+    return `<div class="quantity-picker">
+        <b class="quantity-label">${label(metre ? 'Length (metres)' : 'Quantity (pieces)', metre ? 'పొడవు (మీటర్లు)' : 'పరిమాణం (ముక్కలు)')}</b>
+        <div class="quantity-stepper">
+            <button type="button" class="quantity-adjust" data-change="-${metre ? '.25' : '1'}" aria-label="Decrease">−</button>
+            <input id="${inputId}" class="quantity-input" type="number" inputmode="decimal" min="${product.minimumOrder || (metre ? .25 : 1)}" step="${metre ? '.25' : '1'}" value="${normaliseQuantity(product, value)}">
+            <button type="button" class="quantity-adjust" data-change="${metre ? '.25' : '1'}" aria-label="Increase">+</button>
+        </div>
+        ${presets.length ? `<p class="quantity-presets-label">${label('Add more', 'మరింత జోడించండి')}</p><div class="quantity-presets">${presets.map(preset => `<button type="button" data-preset="${preset}">+${preset}m</button>`).join('')}</div>` : ''}
+    </div>`;
+}
+
+// Preset buttons ADD to the current value; +/- buttons step by one unit.
+function bindQuantityPicker(container, product, changed) {
+    const input = container.querySelector('.quantity-input');
+    const apply = value => { input.value = normaliseQuantity(product, value); changed(Number(input.value)); };
+    container.querySelectorAll('[data-change]').forEach(button => button.onclick = () => apply(Number(input.value) + Number(button.dataset.change)));
+    container.querySelectorAll('[data-preset]').forEach(button => button.onclick = () => apply(Number(input.value) + Number(button.dataset.preset)));
+    input.onchange = () => apply(input.value);
+}
+
+/* ---------- product display helpers ---------- */
+function productPrice(product) {
+    return Number.isFinite(product.price) ? `₹${product.price.toLocaleString('en-IN')} / ${product.saleUnit}` : label('Price on enquiry', 'ధర విచారణపై');
+}
+function stockLabel(product) {
+    const stock = Number(product.unitsAvailable);
+    if (!Number.isFinite(stock)) return label('Availability on enquiry', 'లభ్యత విచారణపై');
+    if (stock <= 0) return label('Out of stock', 'నిల్వలో లేదు');
+    return `${stock} ${product.saleUnit === 'metre' ? label('m available', 'మీటర్లు లభ్యం') : label('pieces available', 'ముక్కలు లభ్యం')}`;
+}
+function productCard(product) {
+    const unavailable = Number(product.unitsAvailable) === 0;
+    return `<article class="product-card"><a href="product.html?id=${encodeURIComponent(product.id)}"><img loading="lazy" decoding="async" src="assets/products/${product.image}" alt="${label(product.name, product.te)}"></a><div><p class="eyebrow">${label(product.category, product.teCategory)}</p><h3>${label(product.name, product.te)}</h3><p>${label(product.description, product.teDescription)}</p><p class="price">${productPrice(product)}</p><p class="stock-status${unavailable ? ' is-out' : ''}">${stockLabel(product)}</p><a class="text-link" href="product.html?id=${encodeURIComponent(product.id)}">${label('View details', 'వివరాలు చూడండి')} →</a></div></article>`;
+}
+
+/* ---------- page renderers ---------- */
+function renderHome() {
+    const grid = document.querySelector('#product-grid');
+    if (grid) grid.innerHTML = productData.slice(0, 6).map(productCard).join('');
+    const stage = document.querySelector('#stage-grid');
+    if (stage) stage.innerHTML = stages.map((s, i) => `<article class="stage"><img src="assets/ponduru/${s[8]}" alt=""><div><p class="eyebrow">${label('Stage', 'దశ')} ${String(i + 1).padStart(2, '0')}</p><h3>${label(s[0], s[1])}</h3><p>${label(s[4], s[5])}</p></div></article>`).join('');
+    const leaders = document.querySelector('#leader-grid');
+    if (leaders) leaders.innerHTML = [['President', 'అధ్యక్షుడు', 'Prasad'], ['Secretary', 'కార్యదర్శి', 'D. Venakata Rao'], ['Treasurer & Production Manager', 'కోశాధికారి మరియు ఉత్పత్తి మేనేజర్', 'U. V. Satyanarayana']].map(x => `<article class="leader"><p class="eyebrow">${label(x[0], x[1])}</p><h3>${x[2]}</h3></article>`).join('');
+}
+
+function renderShop() {
+    const grid = document.querySelector('#all-products');
+    if (grid) grid.innerHTML = productData.map(productCard).join('');
+}
+
+function renderJourney() {
+    const target = document.querySelector('#full-journey');
+    if (target) target.innerHTML = stages.map((s, i) => `<article class="journey-stage"><img src="assets/ponduru/${s[8]}" alt="${label(s[0], s[1])}"><div><p class="eyebrow">${label('Stage', 'దశ')} ${String(i + 1).padStart(2, '0')} · ${label(s[2], s[3])}</p><h2>${label(s[0], s[1])}</h2><p>${label(s[4], s[5])}</p><div class="craft-note">${label(s[6], s[7])}</div></div></article>`).join('');
+}
+
+function renderProduct() {
+    const target = document.querySelector('#product-detail');
+    if (!target) return;
+    const product = productData.find(item => item.id === new URLSearchParams(location.search).get('id'));
+    if (!product) { target.innerHTML = `<p class="catalogue-message">${label('Loading product catalogue…', 'ఉత్పత్తి జాబితా లోడ్ అవుతోంది…')}</p>`; return; }
+    const unavailable = Number(product.unitsAvailable) === 0;
+    target.innerHTML = `<img src="assets/products/${product.image}" alt="${label(product.name, product.te)}"><div><p class="eyebrow">${label(product.category, product.teCategory)}</p><h1>${label(product.name, product.te)}</h1><p class="product-description">${label(product.description, product.teDescription)}</p><p class="price large">${productPrice(product)}</p><p class="stock-status${unavailable ? ' is-out' : ''}">${stockLabel(product)}</p><p>${product.details}</p><div class="product-specs"><div><b>${label('Material', 'పదార్థం')}</b><br>${product.material}</div><div><b>${label('Yarn count', 'నూలు లెక్క')}</b><br>${product.yarnCount}</div><div><b>${label('Weave type', 'నేత రకం')}</b><br>${product.weave}</div><div><b>${label('Colour', 'రంగు')}</b><br>${product.colour}</div><div><b>${label('Availability', 'లభ్యత')}</b><br>${product.availability || stockLabel(product)}</div></div>${unavailable ? '' : quantityPicker(product, product.minimumOrder, 'quantity')}<div class="actions"><button class="button" id="add-cart" ${unavailable ? 'disabled' : ''}>${unavailable ? label('Out of stock', 'నిల్వలో లేదు') : label('Add to cart', 'కార్ట్‌కు జోడించండి')}</button><a class="button secondary" id="buy-now" href="cart.html" ${unavailable ? 'style="pointer-events:none;opacity:.55"' : ''}>${label('Buy / enquire now', 'కొనండి / విచారించండి')}</a></div></div>`;
+    if (!unavailable) {
+        const picker = target.querySelector('.quantity-picker');
+        const addItem = () => { add(product.id, product.variants[0], picker.querySelector('.quantity-input').value); document.querySelector('#add-cart').textContent = label('Added to cart', 'కార్ట్‌కు జోడించబడింది'); };
+        bindQuantityPicker(picker, product, () => {});
+        document.querySelector('#add-cart').onclick = addItem;
+        document.querySelector('#buy-now').onclick = addItem;
+    }
+}
+
+function renderCart() {
+    const target = document.querySelector('#cart-items');
+    if (!target) return;
+    const valid = cart().filter(item => productData.some(product => product.id === item.id));
+    const enquiry = document.querySelector('#cart-enquiry');
+    if (productData.length && valid.length !== cart().length) saveCart(valid);
+    if (!valid.length) {
+        target.innerHTML = `<p>${productData.length ? label('Your cart is empty.', 'మీ కార్ట్ ఖాళీగా ఉంది.') : label('Loading product catalogue…', 'ఉత్పత్తి జాబితా లోడ్ అవుతోంది…')}</p>`;
+        if (enquiry) enquiry.style.display = 'none';
+        return;
+    }
+    target.innerHTML = valid.map((item, index) => {
+        const product = productData.find(entry => entry.id === item.id);
+        return `<article class="cart-item"><img src="assets/products/${product.image}" alt="${label(product.name, product.te)}"><div><h2>${label(product.name, product.te)}</h2><p class="price">${productPrice(product)}</p>${quantityPicker(product, item.quantity, `cart-quantity-${index}`)}<button class="text-link" data-remove="${index}">${label('Remove', 'తొలగించండి')}</button></div></article>`;
+    }).join('');
+    target.querySelectorAll('.cart-item').forEach((item, index) => bindQuantityPicker(item, productData.find(product => product.id === valid[index].id), quantity => {
+        const updated = cart().filter(entry => productData.some(product => product.id === entry.id));
+        updated[index].quantity = quantity;
+        saveCart(updated);
+        renderCart();
+    }));
+    target.querySelectorAll('[data-remove]').forEach(button => button.onclick = () => {
+        const updated = cart().filter(entry => productData.some(product => product.id === entry.id));
+        updated.splice(Number(button.dataset.remove), 1);
+        saveCart(updated);
+        renderCart();
+    });
+    if (enquiry) { enquiry.style.display = 'inline-block'; enquiry.href = 'checkout.html'; }
+}
+
+/* ---------- shop search/filter ---------- */
+function refreshCatalogueControls() {
+    const catalogue = document.querySelector('#all-products');
+    const search = document.querySelector('#product-search');
+    const category = document.querySelector('#product-category');
+    const count = document.querySelector('#product-count');
+    if (!catalogue || !search || !category || !count) return;
+    const show = () => {
+        const query = search.value.trim().toLowerCase();
+        const selected = category.value;
+        const visible = productData.filter(product => (selected === 'All' || product.category === selected) && [product.name, product.category, product.description].join(' ').toLowerCase().includes(query));
+        catalogue.innerHTML = visible.map(productCard).join('');
+        count.textContent = `${visible.length} ${visible.length === 1 ? label('product', 'ఉత్పత్తి') : label('products', 'ఉత్పత్తులు')}`;
+    };
+    search.oninput = show;
+    category.onchange = show;
+    show();
+}
+
+/* ---------- contact form ---------- */
+function contactForm() {
+    const f = document.querySelector('#enquiry-form');
+    if (!f) return;
+    f.addEventListener('submit', e => {
+        e.preventDefault();
+        const d = new FormData(f);
+        const items = cart().map(x => {
+            const p = productData.find(p => p.id === x.id);
+            return p ? `${p.name} (${x.variant}) × ${x.quantity}` : '';
+        }).filter(Boolean).join('\n');
+        location.href = `mailto:?subject=${encodeURIComponent('AFKKS website enquiry')}&body=${encodeURIComponent(`Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\nProducts:\n${items || 'None selected'}\n\nMessage:\n${d.get('message')}`)}`;
+    });
+}
+
+/* ---------- misc page setup ---------- */
+function deferNoncriticalImages() {
+    document.querySelectorAll('.product-card img, .stage img, .journey-stage img, .cart-item img').forEach(image => { image.loading = 'lazy'; image.decoding = 'async'; });
+}
+
+const register = [['VERIFIED', 'Institution profile', 'KVIC lists Andhra Fine Khadi Karmikabhivrudhi Sangham, Ponduru as institution code 178, near the bus stand, aided by KVIC. The profile lists Khadi Mark No. 036 and a certificate dated through 31 March 2026.'], ['VERIFIED', 'Founding milestone', 'The Ministry of Culture district repository records the Andhra Sanna Khadi Sangha as established on 1 April 1949 and records Acharya Vinoba Bhave laying its foundation stone on 13 October 1955. AFKKS archival confirmation is still being sought.'], ['VERIFIED', 'Government initiative', 'Srikakulam district’s ODOP page records that a detailed project report was sought for a proposed Mega Handloom Cluster.'], ['VERIFIED', 'Craft recognition', 'Public heritage documentation describes Ponduru Patnulu Khadi as hand-spun and handwoven, with AFKKS functioning as a khadi cooperative in Ponduru.'], ['UNVERIFIED', 'First office-bearers', 'The President, Secretary and Managing Director recorded at the 1949 registration have not yet been confirmed.'], ['VERIFIED', 'Current leadership', 'AFKKS confirms the current office-bearers as President Prasad, Secretary D. Venakata Rao, and Treasurer & Production Manager U. V. Satyanarayana. Their tenure dates remain to be confirmed.'], ['UNVERIFIED', 'Artisan headcount', 'AFKKS needs to provide one dated current count, ideally separating Ponduru town from the wider district.'], ['UNVERIFIED', 'Early history', 'The early narrative, master artisans, original objectives and funding require independent archival corroboration.'], ['UNVERIFIED', 'Ponduru history timeline', 'The exact date of Gandhi’s Dusi railway-station connection and the boundary between folklore and documented history require further research.'], ['UNVERIFIED', 'Foundation-stone archive', 'Photographs, invitations, press clippings and confirmation of the ceremony remain to be located in AFKKS records.'], ['UNVERIFIED', 'Support & GI detail', 'Scheme support, GI geographical boundary and authorised-user details require official records.'], ['UNVERIFIED', 'Dignitary visits', 'The AFKKS visitors’ book and archives need to confirm reported visits and occasions.'], ['UNVERIFIED', 'Social impact', 'Benefits, bonuses and prevailing spinner/weaver wages require first-hand, current confirmation.'], ['UNVERIFIED', 'Awards & future roadmap', 'Awards, sales/visitor figures, Khadi Village status and internal plans require documentary confirmation.']];
+
+function setupJourneyRegister() {
+    const journeyPage = document.querySelector('#full-journey');
+    if (!journeyPage || document.querySelector('#afkks-register')) return;
+    journeyPage.insertAdjacentHTML('afterend', `<section id="afkks-register" style="background:#eee5d3;padding:58px 24px;margin:0 -24px"><div class="container" style="max-width:1000px"><p class="eyebrow">AFKKS institutional research register</p><h2 style="font-size:40px">Verified history and records under verification</h2><p>Each item is clearly labelled. Unverified entries remain marked until AFKKS archives, official records or other primary evidence confirm them.</p><div style="display:grid;gap:12px;margin-top:28px">${register.map(r => `<article style="background:#f8f4ea;padding:20px;border-left:5px solid ${r[0] === 'VERIFIED' ? '#4b5d35' : '#9f482f'}"><span style="font-size:11px;font-weight:700;letter-spacing:.08em;color:${r[0] === 'VERIFIED' ? '#4b5d35' : '#9f482f'}">${r[0]}${r[0] === 'UNVERIFIED' ? ' — PENDING CONFIRMATION' : ''}</span><h3 style="font-size:25px;margin:6px 0">${r[1]}</h3><p style="margin:0">${r[2]}</p></article>`).join('')}</div></div></section>`);
+}
+
+function setupHomeIntro() {
+    const homeProducts = document.querySelector('#products');
+    if (!homeProducts || document.querySelector('#afkks-home-intro')) return;
+    homeProducts.insertAdjacentHTML('beforebegin', '<section id="afkks-home-intro" class="container" style="padding:72px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px"><div><p class="eyebrow">Ponduru heritage</p><h3>Fine-count Khadi</h3><p>Rooted in a living Andhra Pradesh tradition.</p></div><div><p class="eyebrow">Made by hand</p><h3>Every metre matters</h3><p>Each metre carries the rhythm of a handloom.</p></div><div><p class="eyebrow">Built to last</p><h3>Timeless cloth</h3><p>Thoughtful fabric for beautiful, enduring pieces.</p></div></section>');
+}
+
+function setupCatalogueControls() {
+    const catalogue = document.querySelector('#all-products');
+    if (!catalogue || document.querySelector('#product-search')) return;
+    catalogue.insertAdjacentHTML('beforebegin', '<div class="catalogue-controls"><input id="product-search" placeholder="Search products" aria-label="Search products"><select id="product-category"><option value="All">All categories</option></select></div><p id="product-count"></p>');
+}
+
+function ensureTeluguFont() {
+    if (!document.querySelector('link[data-afkks-telugu-font]')) document.head.insertAdjacentHTML('beforeend', '<link data-afkks-telugu-font rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700&display=swap">');
+}
+
+/* ---------- Excel catalogue loading ---------- */
+function loadXlsxLibrary() {
+    return new Promise((resolve, reject) => {
+        if (window.XLSX) return resolve(window.XLSX);
+        const sources = ['assets/vendor/xlsx.full.min.js', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js', 'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
+        const tryNext = i => {
+            if (i >= sources.length) return reject(new Error('Excel reader unavailable: none of the local or CDN sources loaded'));
+            const script = document.createElement('script');
+            script.src = sources[i];
+            script.onload = () => window.XLSX ? resolve(window.XLSX) : tryNext(i + 1);
+            script.onerror = () => { console.warn(`Could not load Excel reader from ${sources[i]}, trying next source…`); tryNext(i + 1); };
+            document.head.appendChild(script);
+        };
+        tryNext(0);
+    });
+}
+
+function productFromRow(row) {
+    return {
+        id: String(row.id || '').trim(),
+        name: String(row.name_en || ''),
+        te: String(row.name_te || row.name_en || ''),
+        category: String(row.category || ''),
+        teCategory: String(row.category_te || row.category || ''),
+        price: Number(row.price_inr),
+        saleUnit: String(row.sale_unit || 'piece').trim().toLowerCase(),
+        unitsAvailable: Number(row.units_available),
+        minimumOrder: Number(row.minimum_order || 1),
+        image: String(row.image_file || ''),
+        description: String(row.description_en || ''),
+        teDescription: String(row.description_te || row.description_en || ''),
+        material: String(row.material || '—'),
+        yarnCount: String(row.yarn_count || '—'),
+        weave: String(row.weave || '—'),
+        colour: String(row.colour || '—'),
+        availability: String(row.availability || ''),
+        details: String(row.product_note || ''),
+        variants: String(row.product_options || row.sale_unit || 'piece').split('|').map(value => value.trim()).filter(Boolean)
+    };
+}
+
+function renderAll() {
+    renderHome();
+    renderShop();
+    renderProduct();
+    renderCart();
+}
+
+async function loadExcelCatalogue() {
+    try {
+        const XLSX = await loadXlsxLibrary();
+        const response = await fetch(`products.xlsx?updated=${Date.now()}`);
+        if (!response.ok) throw new Error('products.xlsx not found');
+        const workbook = XLSX.read(await response.arrayBuffer(), { type: 'array' });
+        const rows = XLSX.utils.sheet_to_json(workbook.Sheets.Products, { defval: '' });
+        const products = rows.filter(row => String(row.active).trim().toLowerCase() === 'yes').map(productFromRow).filter(product => product.id && product.name && product.image);
+        if (!products.length) throw new Error('No active products in Excel');
+        productData.splice(0, productData.length, ...products);
+        renderAll();
+        const category = document.querySelector('#product-category');
+        if (category) category.innerHTML = '<option value="All">All categories</option>' + [...new Set(products.map(product => product.category))].map(value => `<option>${value}</option>`).join('');
+        refreshCatalogueControls();
+    } catch (error) {
+        console.error(error);
+        document.querySelectorAll('#product-grid, #all-products, #product-detail').forEach(target => {
+            if (!productData.length) target.innerHTML = `<p class="catalogue-message">Product catalogue could not be loaded. Ensure products.xlsx is uploaded beside index.html and that the site is served over http(s) rather than opened as a local file. (${error.message})</p>`;
+        });
+    }
+}
+
+/* ---------- boot ---------- */
+setLanguage();
+ensureTeluguFont();
+setupHomeIntro();
+setupCatalogueControls();
+setupJourneyRegister();
+renderAll();
+renderJourney();
+contactForm();
 deferNoncriticalImages();
 new MutationObserver(deferNoncriticalImages).observe(document.body, { childList: true, subtree: true });
 
-/* Excel-only product catalogue */
-function loadXlsxLibrary() { return new Promise((resolve, reject) => { if (window.XLSX) return resolve(window.XLSX); const sources = ['assets/vendor/xlsx.full.min.js', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js', 'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js']; const tryNext = i => { if (i >= sources.length) return reject(new Error('Excel reader unavailable: none of the local or CDN sources loaded')); const script = document.createElement('script'); script.src = sources[i]; script.onload = () => window.XLSX ? resolve(window.XLSX) : tryNext(i + 1); script.onerror = () => { console.warn(`Could not load Excel reader from ${sources[i]}, trying next source…`); tryNext(i + 1); }; document.head.appendChild(script); }; tryNext(0); }); }
-function productFromRow(row) { return { id: String(row.id || '').trim(), name: String(row.name_en || ''), te: String(row.name_te || row.name_en || ''), category: String(row.category || ''), teCategory: String(row.category_te || row.category || ''), price: Number(row.price_inr), saleUnit: String(row.sale_unit || 'piece').trim().toLowerCase(), unitsAvailable: Number(row.units_available), minimumOrder: Number(row.minimum_order || 1), image: String(row.image_file || ''), description: String(row.description_en || ''), teDescription: String(row.description_te || row.description_en || ''), material: String(row.material || '—'), yarnCount: String(row.yarn_count || '—'), weave: String(row.weave || '—'), colour: String(row.colour || '—'), availability: String(row.availability || ''), details: String(row.product_note || ''), variants: String(row.product_options || row.sale_unit || 'piece').split('|').map(value => value.trim()).filter(Boolean) }; }
-function productPrice(product) { return Number.isFinite(product.price) ? `₹${product.price.toLocaleString('en-IN')} / ${product.saleUnit}` : label('Price on enquiry', 'ధర విచారణపై'); }
-function productCard(product) { return `<article class="product-card"><a href="product.html?id=${encodeURIComponent(product.id)}"><img loading="lazy" decoding="async" src="assets/products/${product.image}" alt="${label(product.name, product.te)}"></a><div><p class="eyebrow">${label(product.category, product.teCategory)}</p><h3>${label(product.name, product.te)}</h3><p>${label(product.description, product.teDescription)}</p><p class="price">${productPrice(product)}</p><a class="text-link" href="product.html?id=${encodeURIComponent(product.id)}">${label('View details', 'వివరాలు చూడండి')} →</a></div></article>`; }
-function normaliseQuantity(product, value) { const step = product.saleUnit === 'metre' ? .25 : 1, minimum = Number(product.minimumOrder) || step, stock = Number(product.unitsAvailable), rounded = Math.round(Number(value || minimum) / step) * step, limited = stock > 0 ? Math.min(rounded, stock) : rounded; return Math.max(minimum, limited); }
-function quantityPicker(product, value, inputId) { const metre = product.saleUnit === 'metre', presets = metre ? [.25, .5, .75, 1, 2, 3] : []; return `<div class="quantity-picker"><b class="quantity-label">${label(metre ? 'Length (metres)' : 'Quantity (pieces)', metre ? 'పొడవు (మీటర్లు)' : 'పరిమాణం (ముక్కలు)')}</b><div class="quantity-stepper"><button type="button" class="quantity-adjust" data-change="-${metre ? '.25' : '1'}" aria-label="Decrease">−</button><input id="${inputId}" class="quantity-input" type="number" inputmode="decimal" min="${product.minimumOrder || (metre ? .25 : 1)}" step="${metre ? '.25' : '1'}" value="${normaliseQuantity(product, value)}"><button type="button" class="quantity-adjust" data-change="${metre ? '.25' : '1'}" aria-label="Increase">+</button></div>${presets.length ? `<p class="quantity-presets-label">${label('Add more', 'మరింత జోడించండి')}</p><div class="quantity-presets">${presets.map(preset => `<button type="button" data-preset="${preset}">+${preset}m</button>`).join('')}</div>` : ''}</div>`; }
-function bindQuantityPicker(container, product, changed) { const input = container.querySelector('.quantity-input'), apply = value => { input.value = normaliseQuantity(product, value); changed(Number(input.value)); }; container.querySelectorAll('[data-change]').forEach(button => button.onclick = () => apply(Number(input.value) + Number(button.dataset.change))); container.querySelectorAll('[data-preset]').forEach(button => button.onclick = () => apply(Number(input.value) + Number(button.dataset.preset))); input.onchange = () => apply(input.value); }
-function add(id, variant, quantity) { const product = productData.find(item => item.id === id); if (!product || Number(product.unitsAvailable) === 0) return; const items = cart(), existing = items.find(item => item.id === id && item.variant === variant); if (existing) existing.quantity = normaliseQuantity(product, Number(existing.quantity) + Number(quantity)); else items.push({ id, variant, quantity: normaliseQuantity(product, quantity) }); saveCart(items); }
-function renderProduct() { const target = document.querySelector('#product-detail'); if (!target) return; const product = productData.find(item => item.id === new URLSearchParams(location.search).get('id')); if (!product) { target.innerHTML = '<p class="catalogue-message">Loading product catalogue…</p>'; return; } const unavailable = Number(product.unitsAvailable) === 0; target.innerHTML = `<img src="assets/products/${product.image}" alt="${label(product.name, product.te)}"><div><p class="eyebrow">${label(product.category, product.teCategory)}</p><h1>${label(product.name, product.te)}</h1><p class="product-description">${label(product.description, product.teDescription)}</p><p class="price large">${productPrice(product)}</p><p>${product.details}</p><div class="product-specs"><div><b>Material</b><br>${product.material}</div><div><b>Yarn count</b><br>${product.yarnCount}</div><div><b>Weave type</b><br>${product.weave}</div><div><b>Colour</b><br>${product.colour}</div><div><b>Availability</b><br>${product.availability || (unavailable ? 'Out of stock' : 'In stock')}</div></div>${unavailable ? '' : quantityPicker(product, product.minimumOrder, 'quantity')}<div class="actions"><button class="button" id="add-cart" ${unavailable ? 'disabled' : ''}>${unavailable ? 'Out of stock' : 'Add to cart'}</button><a class="button secondary" id="buy-now" href="cart.html">Buy / enquire now</a></div></div>`; if (!unavailable) { const picker = target.querySelector('.quantity-picker'), addItem = () => { add(product.id, product.variants[0], picker.querySelector('.quantity-input').value); document.querySelector('#add-cart').textContent = 'Added to cart'; }; bindQuantityPicker(picker, product, () => {}); document.querySelector('#add-cart').onclick = addItem; document.querySelector('#buy-now').onclick = addItem; } }
-function renderCart() { const target = document.querySelector('#cart-items'); if (!target) return; const valid = cart().filter(item => productData.some(product => product.id === item.id)); const enquiry = document.querySelector('#cart-enquiry'); if (productData.length && valid.length !== cart().length) saveCart(valid); if (!valid.length) { target.innerHTML = `<p>${productData.length ? label('Your cart is empty.', 'మీ కార్ట్ ఖాళీగా ఉంది.') : label('Loading product catalogue…', 'ఉత్పత్తి జాబితా లోడ్ అవుతోంది…')}</p>`; if (enquiry) enquiry.style.display = 'none'; return; } target.innerHTML = valid.map((item, index) => { const product = productData.find(entry => entry.id === item.id); return `<article class="cart-item"><img src="assets/products/${product.image}" alt="${label(product.name, product.te)}"><div><h2>${label(product.name, product.te)}</h2><p class="price">${productPrice(product)}</p>${quantityPicker(product, item.quantity, `cart-quantity-${index}`)}<button class="text-link" data-remove="${index}">${label('Remove', 'తొలగించండి')}</button></div></article>`; }).join(''); target.querySelectorAll('.cart-item').forEach((item, index) => bindQuantityPicker(item, productData.find(product => product.id === valid[index].id), quantity => { const updated = cart().filter(entry => productData.some(product => product.id === entry.id)); updated[index].quantity = quantity; saveCart(updated); renderCart(); })); target.querySelectorAll('[data-remove]').forEach(button => button.onclick = () => { const updated = cart().filter(entry => productData.some(product => product.id === entry.id)); updated.splice(Number(button.dataset.remove), 1); saveCart(updated); renderCart(); }); if (enquiry) enquiry.style.display = 'inline-block'; }
-function refreshCatalogueControls() { const catalogue = document.querySelector('#all-products'), search = document.querySelector('#product-search'), category = document.querySelector('#product-category'), count = document.querySelector('#product-count'); if (!catalogue || !search || !category || !count) return; const show = () => { const query = search.value.trim().toLowerCase(), selected = category.value, visible = productData.filter(product => (selected === 'All' || product.category === selected) && [product.name, product.category, product.description].join(' ').toLowerCase().includes(query)); catalogue.innerHTML = visible.map(productCard).join(''); count.textContent = `${visible.length} ${visible.length === 1 ? 'product' : 'products'}`; }; search.oninput = show; category.onchange = show; show(); }
-async function loadExcelCatalogue() { try { const XLSX = await loadXlsxLibrary(), response = await fetch(`products.xlsx?updated=${Date.now()}`); if (!response.ok) throw new Error('products.xlsx not found'); const workbook = XLSX.read(await response.arrayBuffer(), { type: 'array' }), rows = XLSX.utils.sheet_to_json(workbook.Sheets.Products, { defval: '' }), products = rows.filter(row => String(row.active).trim().toLowerCase() === 'yes').map(productFromRow).filter(product => product.id && product.name && product.image); if (!products.length) throw new Error('No active products in Excel'); productData.splice(0, productData.length, ...products); renderHome(); renderShop(); renderProduct(); renderCart(); const category = document.querySelector('#product-category'); if (category) category.innerHTML = '<option value="All">All categories</option>' + [...new Set(products.map(product => product.category))].map(value => `<option>${value}</option>`).join(''); refreshCatalogueControls(); } catch (error) { console.error(error); document.querySelectorAll('#product-grid, #all-products, #product-detail').forEach(target => { if (!productData.length) target.innerHTML = `<p class="catalogue-message">Product catalogue could not be loaded. Ensure products.xlsx is uploaded beside index.html and that the site is served over http(s) rather than opened as a local file. (${error.message})</p>`; }); } }
+if (document.querySelector('#product-grid, #all-products, #product-detail, #cart-items')) loadExcelCatalogue();
