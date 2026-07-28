@@ -428,3 +428,132 @@ html[lang="te"] .eyebrow {
         justify-content: center;
     }
 }
+
+/* Product quantity controls */
+.product-specs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #ded2b9;
+    font-size: 14px;
+}
+
+.stock-status {
+    margin: 14px 0 0;
+    color: #23643d;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.stock-status.is-out {
+    color: #9b3429;
+}
+
+.quantity-picker {
+    margin-top: 22px;
+}
+
+.quantity-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.quantity-stepper {
+    display: inline-grid;
+    grid-template-columns: 42px 98px 42px;
+    min-height: 42px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #fffdf8;
+}
+
+.quantity-adjust {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: #f3ead9;
+    color: var(--soil);
+    cursor: pointer;
+}
+
+.quantity-adjust:hover,
+.quantity-adjust:focus-visible {
+    background: #e5dac4;
+}
+
+.quantity-adjust svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.quantity-input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    border-right: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+    border-radius: 0;
+    background: #fffdf8;
+    color: var(--ink);
+    text-align: center;
+    font: inherit;
+}
+
+.quantity-input:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -2px;
+}
+
+.quantity-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 9px;
+}
+
+.quantity-presets button {
+    min-width: 42px;
+    padding: 6px 8px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #fffdf8;
+    color: var(--soil);
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.quantity-presets button:hover,
+.quantity-presets button:focus-visible {
+    border-color: var(--soil);
+    background: #f3ead9;
+}
+
+.cart-total {
+    margin: 22px 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+@media(max-width:760px) {
+    .product-specs {
+        grid-template-columns: 1fr;
+    }
+
+    .quantity-stepper {
+        grid-template-columns: 42px minmax(78px, 1fr) 42px;
+        width: 100%;
+        max-width: 240px;
+    }
+}
