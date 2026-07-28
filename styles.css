@@ -453,23 +453,26 @@ html[lang="te"] .eyebrow {
 
 .quantity-picker {
     margin-top: 22px;
+    padding: 16px 18px;
+    background: #f3ead9;
+    border-radius: 6px;
 }
 
 .quantity-label {
     display: block;
-    margin-bottom: 8px;
-    color: var(--ink);
+    margin-bottom: 10px;
+    color: var(--soil);
     font-size: 14px;
     font-weight: 700;
 }
 
 .quantity-stepper {
     display: inline-grid;
-    grid-template-columns: 42px 98px 42px;
-    min-height: 42px;
+    grid-template-columns: 44px 110px 44px;
+    min-height: 46px;
     overflow: hidden;
     border: 1px solid var(--rule);
-    border-radius: 3px;
+    border-radius: 4px;
     background: #fffdf8;
 }
 
@@ -477,14 +480,17 @@ html[lang="te"] .eyebrow {
     display: grid;
     place-items: center;
     border: 0;
-    background: #f3ead9;
+    background: #eee2cb;
     color: var(--soil);
+    font-size: 20px;
+    font-weight: 700;
     cursor: pointer;
+    transition: background .15s ease;
 }
 
 .quantity-adjust:hover,
 .quantity-adjust:focus-visible {
-    background: #e5dac4;
+    background: var(--sand);
 }
 
 .quantity-adjust svg {
@@ -504,40 +510,65 @@ html[lang="te"] .eyebrow {
     border-left: 1px solid var(--rule);
     border-radius: 0;
     background: #fffdf8;
-    color: var(--ink);
+    color: var(--soil);
     text-align: center;
-    font: inherit;
+    font: 700 16px/1 "Work Sans", sans-serif;
 }
 
 .quantity-input:focus {
-    outline: 2px solid var(--gold);
+    outline: 2px solid var(--terracotta);
     outline-offset: -2px;
+}
+
+/* Chrome/Safari/Edge: hide native number spinners since we have custom +/- */
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.quantity-presets-label {
+    margin: 14px 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--terracotta);
 }
 
 .quantity-presets {
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
-    margin-top: 9px;
+    gap: 8px;
 }
 
 .quantity-presets button {
-    min-width: 42px;
-    padding: 6px 8px;
+    min-width: 52px;
+    padding: 8px 12px;
     border: 1px solid var(--rule);
-    border-radius: 3px;
+    border-radius: 999px;
     background: #fffdf8;
     color: var(--soil);
     cursor: pointer;
     font: inherit;
     font-size: 13px;
     font-weight: 700;
+    transition: background .15s ease, border-color .15s ease, transform .1s ease;
 }
 
 .quantity-presets button:hover,
 .quantity-presets button:focus-visible {
-    border-color: var(--soil);
-    background: #f3ead9;
+    border-color: var(--terracotta);
+    background: #eee2cb;
+}
+
+.quantity-presets button:active {
+    transform: scale(.95);
+    background: var(--sand);
 }
 
 .cart-total {
